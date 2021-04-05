@@ -19,10 +19,8 @@ public class Cidade {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
-    @NotEmpty(message = "{campo.estado.obrigatorio}")
     private String estado;
 
 }

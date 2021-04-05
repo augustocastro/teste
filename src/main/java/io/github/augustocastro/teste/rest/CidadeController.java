@@ -29,12 +29,12 @@ public class CidadeController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable Integer id, @Valid @RequestBody Cidade cidade) {
+    public void atualizar(@PathVariable Integer id, @Valid @RequestBody CidadeDTO dto) {
         repository
                 .findById(id)
                 .map(c -> {
-                    c.setNome(cidade.getNome());
-                    c.setEstado(cidade.getEstado());
+                    c.setNome(dto.getNome());
+                    c.setEstado(dto.getEstado());
                     repository.save(c);
                     return Void.TYPE;
                 })
