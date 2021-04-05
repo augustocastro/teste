@@ -54,7 +54,7 @@ public class CidadeController {
     }
 
     @GetMapping("/estado/{estado}")
-    public Cidade pesquisarPorEstado(@PathVariable String estado) {
+    public List<Cidade> pesquisarPorEstado(@PathVariable String estado) {
         return repository
                 .findByEstado(estado)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cidade não encontrada."));
