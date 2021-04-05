@@ -1,4 +1,4 @@
-package io.github.augustocastro.teste.ultil;
+package io.github.augustocastro.teste.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

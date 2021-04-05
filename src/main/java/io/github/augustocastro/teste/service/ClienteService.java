@@ -6,7 +6,7 @@ import io.github.augustocastro.teste.model.entity.Cliente;
 import io.github.augustocastro.teste.model.repository.CidadeRepository;
 import io.github.augustocastro.teste.model.repository.ClienteRepository;
 import io.github.augustocastro.teste.rest.dto.ClienteDTO;
-import io.github.augustocastro.teste.ultil.DateHelper;
+import io.github.augustocastro.teste.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class ClienteService {
 
     public Cliente salvar(ClienteDTO dto) {
         try {
-            Cliente cliente = preencherCliente(dto);
+            Cliente cliente = criarCliente(dto);
             repository.save(cliente);
             return cliente;
         } catch (Exception ex) {
@@ -39,7 +39,7 @@ public class ClienteService {
                 .findById(id)
                 .map(c -> {
                     try {
-                        Cliente cliente = preencherCliente(dto);
+                        Cliente cliente = criarCliente(dto);
                         cliente.setId(c.getId());
                         repository.save(cliente);
                         return Void.TYPE;
@@ -50,7 +50,7 @@ public class ClienteService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
     }
 
-    private Cliente preencherCliente(ClienteDTO dto) {
+    private Cliente criarCliente(ClienteDTO dto) {
         Cidade cidade = cidadeRepository
                 .findById(dto.getCidade())
                 .orElseThrow(() -> new NotFoundException("Cidade não encontrada"));
