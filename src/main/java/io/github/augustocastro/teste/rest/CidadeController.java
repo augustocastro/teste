@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cidades")
@@ -46,18 +48,22 @@ public class CidadeController {
         return repository.findAll();
     }
 
-    @GetMapping("/nome/{nome}")
-    public Cidade pesquisarPorNome(@PathVariable String nome) {
-        return repository
-                .findByNome(nome)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cidade não encontrada."));
-    }
+    @GetMapping("/query")
+    public List<Cidade> pesquisar(@RequestParam(required = false) String estado, @RequestParam(required = false) String nome) {
+        Optional<List<Cidade>> optional;
 
-    @GetMapping("/estado/{estado}")
-    public List<Cidade> pesquisarPorEstado(@PathVariable String estado) {
-        return repository
-                .findByEstado(estado)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cidade não encontrada."));
+        if (estado != null && nome != null) {
+            optional = repository.findByEstadoAndNome(estado, nome);
+        } else if (estado != null) {
+            optional = repository.findByEstado(estado);
+        } else if (nome != null) {
+            optional = repository.findByNome(nome);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Informe ao menos um paramêtro: Nome ou Estado.");
+        }
+
+        return optional
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhuma cidade encontrada."));
     }
 
     @DeleteMapping("{id}")
